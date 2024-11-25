@@ -8,12 +8,7 @@ const path = require("path");
 const cors = require("cors");
 
 app.use(express.json());
-const corsOptions = {
-  origin: "https://shopstop-fe.vercel.app/", // Replace with your actual Vercel frontend URL
-  optionsSuccessStatus: 200, // Some legacy browsers choke on 204
-};
 
-app.use(cors(corsOptions));
 app.use(cors());
 // db connection
 
