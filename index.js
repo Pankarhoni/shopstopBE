@@ -5,10 +5,15 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const path = require("path");
-const cors = require("cors");
+//const cors = require("cors");
 
 app.use(express.json());
-app.use(cors());
+const corsOptions = {
+  origin: "https://shopstop-fe.vercel.app/", // Replace with your actual Vercel frontend URL
+  optionsSuccessStatus: 200, // Some legacy browsers choke on 204
+};
+
+app.use(cors(corsOptions));
 // db connection
 
 mongoose.connect("mongodb+srv://MongodbProj:1234567890@cluster0.mypnmmg.mongodb.net/e-commerce")
