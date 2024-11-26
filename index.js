@@ -55,9 +55,9 @@ app.listen(port,(error)=>{
     filename:(req,file,cb)=>{
         return cb(null,`${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
     }
-})*/
+})
 
-const upload = multer({storage:storage})
+const upload = multer({storage:storage})*/
 
 //creating upload endpoint for images------------------local host 
 /*app.use('/images',express.static('upload/images'))
