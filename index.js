@@ -18,7 +18,15 @@ app.use(express.json());
 
 // db connection
 
-mongoose.connect("mongodb+srv://MongodbProj:1234567890@cluster0.mypnmmg.mongodb.net/e-commerce")
+//mongoose.connect("mongodb+srv://MongodbProj:1234567890@cluster0.mypnmmg.mongodb.net/e-commerce")
+
+mongoose.connect("mongodb+srv://MongodbProj:1234567890@cluster0.mypnmmg.mongodb.net/e-commerce", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("MongoDB connected"))
+.catch((err) => console.log("MongoDB connection error:", err));
+
 
 //api creation [5:11;29]
 app.get("/",(req,res)=>{
@@ -51,13 +59,20 @@ const upload = multer({storage:storage})
 //creating upload endpoint for images
 app.use('/images',express.static('upload/images'))
 
-app.post("/upload",upload.single('product'),(req,res)=>{
+/*app.post("/upload",upload.single('product'),(req,res)=>{
     res.json({
         success:1,
         image_url:`http://localhost:${port}/images/${req.file.filename}`
     })
 
-})
+})*/
+app.post("/upload", upload.single('product'), (req, res) => {
+  res.json({
+    success: 1,
+    image_url: `https://shopstopbe.onrender.com/images/${req.file.filename}`
+  });
+});
+
 
 //schema for creating product
 const Product = mongoose.model("Product",{
@@ -150,11 +165,22 @@ app.post('/removeproduct',async(req,res)=>{
 })
 
 //api for display/ all products
-app.get('/allproducts',async(req,res)=>{
+/*app.get('/allproducts',async(req,res)=>{
     let products = await Product.find({});
     console.log("All Products fetched");
     res.send(products);
-})
+})*/
+app.get('/allproducts', async (req, res) => {
+  try {
+    let products = await Product.find({});
+    console.log("All Products fetched");
+    res.send(products);
+  } catch (error) {
+    console.error("Error fetching all products:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 
 //api for user creation/seache for user model
 
