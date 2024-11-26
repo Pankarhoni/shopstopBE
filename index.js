@@ -7,6 +7,9 @@ const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
 
+const fs = require('fs');
+
+
 // Replace "*" with your specific Vercel frontend URL for more secure configuration
 app.use(cors({
   origin: '*', // Replace this with your Vercel URL
@@ -24,6 +27,8 @@ mongoose.connect("mongodb+srv://MongodbProj:1234567890@cluster0.mypnmmg.mongodb.
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.log("MongoDB connection error:", err));
 
+// Configure Multer to store files in the 'uploads' folder temporarily=========
+const upload = multer({ dest: 'uploads/' });
 
 
 //api creation [5:11;29]
@@ -44,18 +49,18 @@ app.listen(port,(error)=>{
     }
 })
 
-//Image storage engine
-const storage = multer.diskStorage({
+//Image storage engine---- for local host
+/*const storage = multer.diskStorage({
     destination: './upload/images',
     filename:(req,file,cb)=>{
         return cb(null,`${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
     }
-})
+})*/
 
 const upload = multer({storage:storage})
 
-//creating upload endpoint for images
-app.use('/images',express.static('upload/images'))
+//creating upload endpoint for images------------------local host 
+/*app.use('/images',express.static('upload/images'))
 
 app.post("/upload",upload.single('product'),(req,res)=>{
     res.json({
@@ -70,6 +75,35 @@ app.post("/upload",upload.single('product'),(req,res)=>{
     image_url: `https://shopstopbe.onrender.com/images/${req.file.filename}`
   });
 });*/
+
+// New Image Upload Endpoint - Store as Base64 in MongoDB
+app.post('/upload', upload.single('product'), async (req, res) => {
+  try {
+    const filePath = req.file.path; // Path to the uploaded file
+    const fileData = fs.readFileSync(filePath); // Read the file data
+    const base64Image = fileData.toString('base64'); // Convert to Base64
+
+    // Create a new product with the Base64 image
+    const product = new Product({
+      id: 1, // Set or increment ID as needed
+      name: req.body.name,
+      tag: req.body.tag,
+      image: base64Image, // Store the Base64 encoded image here
+      category: req.body.category,
+      new_price: req.body.new_price,
+      old_price: req.body.old_price,
+    });
+
+    await product.save(); // Save product data to MongoDB
+    fs.unlinkSync(filePath); // Delete the temporary file after saving to MongoDB
+
+    res.json({ success: true, message: 'Product added with image' });
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    res.status(500).send('Error uploading image');
+  }
+});
+
 
 
 //schema for creating product
