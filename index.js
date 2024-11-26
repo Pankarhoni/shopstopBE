@@ -7,10 +7,14 @@ const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
 
+// Replace "*" with your specific Vercel frontend URL for more secure configuration
+app.use(cors({
+  origin: 'https://shopstop-fe.vercel.app/', // Replace this with your Vercel URL
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true // This is important if you’re handling authentication with cookies
+}));
+
 app.use(express.json());
-
-app.use(cors({ origin: "*" })); // This allows all origins; replace "*" with specific domain for security.
-
 
 // db connection
 
