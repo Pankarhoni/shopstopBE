@@ -9,7 +9,7 @@ const cors = require("cors");
 
 // Replace "*" with your specific Vercel frontend URL for more secure configuration
 app.use(cors({
-  origin: 'https://shopstop-fe.vercel.app', // Replace this with your Vercel URL
+  origin: '*', // Replace this with your Vercel URL
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true // This is important if you’re handling authentication with cookies
 }));
