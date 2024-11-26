@@ -9,7 +9,7 @@ const cors = require("cors");
 
 // Replace "*" with your specific Vercel frontend URL for more secure configuration
 app.use(cors({
-  origin: 'https://shopstop-fe.vercel.app/', // Replace this with your Vercel URL
+  origin: 'https://shopstop-fe.vercel.app', // Replace this with your Vercel URL
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true // This is important if you’re handling authentication with cookies
 }));
@@ -20,12 +20,10 @@ app.use(express.json());
 
 //mongoose.connect("mongodb+srv://MongodbProj:1234567890@cluster0.mypnmmg.mongodb.net/e-commerce")
 
-mongoose.connect("mongodb+srv://MongodbProj:1234567890@cluster0.mypnmmg.mongodb.net/e-commerce", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("MongoDB connected"))
-.catch((err) => console.log("MongoDB connection error:", err));
+mongoose.connect("mongodb+srv://MongodbProj:1234567890@cluster0.mypnmmg.mongodb.net/e-commerce")
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.log("MongoDB connection error:", err));
+
 
 
 //api creation [5:11;29]
