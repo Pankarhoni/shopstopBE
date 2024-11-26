@@ -9,7 +9,9 @@ const cors = require("cors");
 
 app.use(express.json());
 
-app.use(cors({ origin: "https://shopstop-fe.vercel.app/" }));
+app.use(cors({ origin: "*" })); // This allows all origins; replace "*" with specific domain for security.
+
+
 // db connection
 
 mongoose.connect("mongodb+srv://MongodbProj:1234567890@cluster0.mypnmmg.mongodb.net/e-commerce")
